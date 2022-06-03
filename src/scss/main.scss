@@ -2,3 +2,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.pie-chart__circle { 
+  transform: rotate(-90deg);
+  animation: pie-chart-fill 2s reverse;
+  transform-origin: center;
+}
+
+.pie-chart__info {
+  opacity: 0;
+  transform: translateY(0.3em);
+  animation: pie-chart-appear 2s forwards;
+}
+
+@keyframes pie-chart-fill {
+  to { stroke-dasharray: 0 100; }
+}
+
+@keyframes pie-chart-appear {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

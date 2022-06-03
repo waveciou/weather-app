@@ -6,6 +6,8 @@ import '../scss/main.scss';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <App />
+    <div className="tw-w-full">
+      <App />
+    </div>
   </React.StrictMode>
 );
