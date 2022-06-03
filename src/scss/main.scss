@@ -60,3 +60,18 @@ body {
     transform: translateY(0);
   }
 }
+
+.bar-chart {
+  width: 300px;
+  height: 200px;
+
+  &__column {
+    fill: $color-blue-dark;
+    transition: fill 0.4s ease;
+    cursor: pointer;
+
+    &:hover {
+      fill: $color-gray-dark;
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import PieChart from '@/TypeScript/piechart';
+import PieChart from '@/TypeScript/pieChart';
+import BarChart from '@/TypeScript/barChart';
 
 interface IDataListItem {
   main: {
@@ -55,25 +56,19 @@ const App = () => {
           }
         });
 
-        data.list.forEach((item: IDataListItem, index: number) => {
-          const { temp_max = 0 , temp_min = 0, humidity = 0 } = item.main;
+        const max = data.list.map(({ main }: IDataListItem) => main.temp_max);
+        const min = data.list.map(({ main }: IDataListItem) => main.temp_min);
+        const hum = data.list.pop().main.humidity;
 
-          const _temp_Max: number[] = [...tempMax, temp_max];
-          const _temp_Min: number[] = [...tempMin, temp_min];
+        setTempMax(max);
+        setTempMin(min);
+        setHumidity(hum);
 
-          setTempMax(_temp_Max);
-          setTempMin(_temp_Min);
-
-          if (index === 0) {
-            setHumidity(humidity);
-          }
-        });
-
-        const name = `${data.city.name}, ${data.city.country}`;
-        setCityName(name);
+        setCityName(`${data.city.name}, ${data.city.country}`);
         setInputValue('');
 
         console.log(data);
+
         setIsLoading(false);
       } catch (error) {
         console.log(error);
@@ -103,10 +98,10 @@ const App = () => {
 
       {
         !isLoading && !isError && cityName !== '' && (
-          <section className="tw-p-4 tw-rounded-md tw-bg-white">
+          <section className="tw-p-5 tw-rounded-md tw-bg-white">
             <div className="tw-flex tw-justify-between">
               <div className="tw-flex-grow tw-basis-0">
-                <h2 className="tw-text-4xl tw-font-bold tw-break-words">{ cityName }</h2>
+                <h2 className="tw-text-3xl tw-font-bold tw-break-words">{ cityName }</h2>
               </div>
               {
                 humidity !== null && (
@@ -116,6 +111,10 @@ const App = () => {
                   </div>
                 )
               }
+            </div>
+            <div className="tw-flex tw-justify-between">
+              <BarChart amount={tempMax} />
+              <BarChart amount={tempMin} />
             </div>
           </section>
         )
