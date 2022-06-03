@@ -29,16 +29,25 @@ body {
   letter-spacing: 1px;
 }
 
-.pie-chart__circle { 
-  transform: rotate(-90deg);
-  animation: pie-chart-fill 2s reverse;
-  transform-origin: center;
-}
+.pie-chart {
+  margin: auto;
 
-.pie-chart__info {
-  opacity: 0;
-  transform: translateY(0.3em);
-  animation: pie-chart-appear 2s forwards;
+  &__circle { 
+    transform: rotate(-90deg);
+    animation: pie-chart-fill 2s reverse;
+    transform-origin: center;
+  }
+
+  &__info {
+    opacity: 0;
+    transform: translateY(0.3em);
+    animation: pie-chart-appear 2s forwards;
+  }
+
+  &__percent {
+    fill: $color-black;
+    font-weight: 700;
+  }
 }
 
 @keyframes pie-chart-fill {

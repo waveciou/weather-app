@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import PieChart from '@/TypeScript/piechart';
 
 interface IDataListItem {
   main: {
@@ -12,10 +13,13 @@ interface IDataListItem {
 const App = () => {
   const [inputValue, setInputValue] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
 
   const [tempMax, setTempMax] = useState<number[]>([]);
   const [tempMin, setTempMin] = useState<number[]>([]);
   const [humidity, setHumidity] = useState<null | number>(null);
+
+  const [cityName, setCityName] = useState<string>('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const result: string = e.target.value;
@@ -24,8 +28,15 @@ const App = () => {
 
   const handleSubmit = async () => {
     const result: string = inputValue.trim();
-    if (result !== '') {
+
+    if (result !== '' && !isLoading) {
       setIsLoading(true);
+      setIsError(false);
+
+      setCityName('');
+      setTempMax([]);
+      setTempMin([]);
+      setHumidity(null);
 
       try {
         const { data } = await axios({
@@ -58,10 +69,15 @@ const App = () => {
           }
         });
 
+        const name = `${data.city.name}, ${data.city.country}`;
+        setCityName(name);
+        setInputValue('');
+
         console.log(data);
         setIsLoading(false);
       } catch (error) {
         console.log(error);
+        setIsError(true);
         setIsLoading(false);
       }
     }
@@ -73,8 +89,10 @@ const App = () => {
       <div className="tw-w-full tw-flex tw-items-center tw-my-8">
         <input
           type="text"
-          className="tw-w-full tw-py-2 tw-px-3 tw-rounded-md tw-bg-white tw-leading-6 tw-flex-grow tw-basis-0 tw-appearance-none tw-tracking-widest"
+          className="tw-w-full tw-py-2 tw-px-3 tw-rounded-md tw-bg-white tw-leading-6 tw-flex-grow tw-basis-0 tw-appearance-none tw-tracking-wide"
+          value={inputValue}
           onChange={handleChange}
+          placeholder="Search City"
         />
         <button
           type="button"
@@ -84,7 +102,33 @@ const App = () => {
       </div>
 
       {
-        isLoading && <div>Loading</div>
+        !isLoading && !isError && cityName !== '' && (
+          <section className="tw-p-4 tw-rounded-md tw-bg-white">
+            <div className="tw-flex tw-justify-between">
+              <div className="tw-flex-grow tw-basis-0">
+                <h2 className="tw-text-4xl tw-font-bold tw-break-words">{ cityName }</h2>
+              </div>
+              {
+                humidity !== null && (
+                  <div className="tw-w-52">
+                    <PieChart amount={humidity} />
+                    <div className="tw-text-center tw-text-xl tw-font-bold tw-my-3">Humidity</div>
+                  </div>
+                )
+              }
+            </div>
+          </section>
+        )
+      }
+
+      {
+        !isLoading && isError && (
+          <div className="tw-text-gray-dark tw-text-center tw-text-2xl tw-font-bold tw-break-words tw-my-20">No Result</div>
+        )
+      }
+
+      {
+        isLoading && !isError && (<div>Loading</div>)
       }
     </div>
   );
