@@ -1,8 +1,33 @@
+@charset "UTF-8";
+@import './_variables.scss';
+
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+TC:400,500&display=fallback');
+@import './_reset.scss';
+
 /* stylelint-disable scss/at-rule-no-unknown */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+html {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  -o-overflow-scrolling: touch;
+}
+
+body {
+  width: 100%;
+  font-size: 18px;
+  font-family: $font-family;
+  color: $color-black;
+  background-color: $color-blue;
+  line-height: 1.4em;
+  letter-spacing: 1px;
+}
 
 .pie-chart__circle { 
   transform: rotate(-90deg);

@@ -68,11 +68,19 @@ const App = () => {
   };
 
   return (
-    <div className="App">
-      <h1>Weather APP</h1>
-      <div>
-        <input type="text" onChange={handleChange} />
-        <button type="button" onClick={handleSubmit}>Submit</button>
+    <div className="tw-w-full tw-max-w-2xl tw-m-auto">
+      <h1 className="tw-my-4 tw-text-center tw-text-4xl tw-font-bold">Weather APP</h1>
+      <div className="tw-w-full tw-flex tw-items-center tw-my-8">
+        <input
+          type="text"
+          className="tw-w-full tw-py-2 tw-px-3 tw-rounded-md tw-bg-white tw-leading-6 tw-flex-grow tw-basis-0 tw-appearance-none tw-tracking-widest"
+          onChange={handleChange}
+        />
+        <button
+          type="button"
+          className="tw-bg-black tw-text-white tw-py-2 tw-px-3 tw-ml-3 tw-rounded-md tw-leading-6"
+          onClick={handleSubmit}
+        >Submit</button>
       </div>
 
       {
