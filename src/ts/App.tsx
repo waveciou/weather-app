@@ -99,7 +99,7 @@ const App = () => {
       {
         !isLoading && !isError && cityName !== '' && (
           <section className="tw-p-5 tw-rounded-md tw-bg-white">
-            <div className="tw-flex tw-justify-between">
+            <div className="tw-flex tw-justify-between tw-mb-3">
               <div className="tw-flex-grow tw-basis-0">
                 <h2 className="tw-text-3xl tw-font-bold tw-break-words">{ cityName }</h2>
               </div>
@@ -113,8 +113,14 @@ const App = () => {
               }
             </div>
             <div className="tw-flex tw-justify-between">
-              <BarChart amount={tempMax} />
-              <BarChart amount={tempMin} />
+              <div>
+                <BarChart amount={tempMax} />
+                <div className="tw-text-center tw-text-xl tw-font-bold tw-my-3">Max Temperature</div>
+              </div>
+              <div>
+                <BarChart amount={tempMin} />
+                <div className="tw-text-center tw-text-xl tw-font-bold tw-my-3">Min Temperature</div>
+              </div>
             </div>
           </section>
         )

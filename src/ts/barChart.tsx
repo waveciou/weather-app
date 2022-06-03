@@ -14,29 +14,32 @@ const BarChart: React.FC<IBarChartProps> = ({ amount }) => {
   const [amountList, setAmountList] = useState<IAmountData[]>([]);
 
   useEffect(() => {
-    const max: number = Math.max(...amount);
-    const min: number = Math.min(...amount);
+    const max: number = Math.max(...amount) * 100;
+    const min: number = Math.min(...amount) * 100;
     const range: number = max - min;
 
-    const result: IAmountData[] = amount.map((value) => {
+    const result: IAmountData[] = amount.map((_value) => {
+      const value = _value * 100;
       let percent = 100;
 
       if (value === max) {
-        percent = 90;
+        percent = 100;
       } else if (value === min) {
         percent = 10;
       } else {
-        percent = (value - min) / range * 100;
+        percent = 10 + ((value - min) / range * 100);
       }
 
-      return { value: Math.floor(value), percent };
+      return { value: _value, percent };
     });
+
+    console.log(result);
 
     setAmountList(result);
   }, [amount]);
 
   return (
-    <svg className="bar-chart" width="300px" height="100%" y="0px" x="0px">
+    <svg className="bar-chart" width="290px" height="100%" y="0px" x="0px">
       {
         amountList.map(({ value, percent }, index: number) => {
           const id: string = uuidv4();
@@ -47,15 +50,16 @@ const BarChart: React.FC<IBarChartProps> = ({ amount }) => {
                 width="50px"
                 height={`${percent}%`}
                 y={`${100 - percent}%`}
-                x={`${(50 + 12) * index}px`}
+                x={`${(50 + 10) * index}px`}
+                rx="6"
               ></rect>
               <text
-                x={`${(50 + 12) * index + 25}px`}
+                x={`${(50 + 10) * index + 25}px`}
                 y={`${104 - percent}%`}
                 fill="#ffffff"
                 alignmentBaseline="central"
                 textAnchor="middle"
-                fontSize="14"
+                fontSize="12"
               >{ value }</text>
             </g>
           );

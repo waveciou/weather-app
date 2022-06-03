@@ -29,6 +29,10 @@ body {
   letter-spacing: 1px;
 }
 
+#root {
+  padding: 10px;
+}
+
 .pie-chart {
   margin: auto;
 
@@ -62,7 +66,7 @@ body {
 }
 
 .bar-chart {
-  width: 300px;
+  width: 290px;
   height: 200px;
 
   &__column {

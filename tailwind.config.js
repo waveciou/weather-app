@@ -7,6 +7,9 @@ module.exports = {
     './src/**/*.{scss,module.scss}',
   ],
   theme: {
+    screens: {
+      desktop: '692px',
+    },
     colors: {
       white: '#FFFFFF',
       black: '#35495e',
