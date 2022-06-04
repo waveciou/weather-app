@@ -7,6 +7,7 @@ import BarChart from './barChart';
 
 interface ICityDetail {
   name: string;
+  weather: string;
   coord: {
     lat: number;
     lon: number;
@@ -110,6 +111,7 @@ const App = () => {
 
         setCityDetail({
           name: `${data.city.name}, ${data.city.country}`,
+          weather: data.list[0].weather[0].description,
           coord,
           population,
           sunrise,
@@ -170,7 +172,10 @@ const App = () => {
                 <div className="tw-p-3 tw-rounded-md tw-bg-gray-light">
                   <ul>
                     <li className="tw-text-base tw-leading-7 tw-font-bold">
-                      <strong>Date: </strong>{ formatTime(cityDetail.time, 'YYYY/MM/DD') }
+                      <strong>Time: </strong>{ formatTime(cityDetail.time) }
+                    </li>
+                    <li className="tw-text-base tw-leading-7 tw-font-bold">
+                      <strong>Weather: </strong>{ cityDetail.weather }
                     </li>
                     <li className="tw-text-base tw-leading-7 tw-font-bold">
                       <strong>Latitude: </strong>{ cityDetail.coord.lat }
@@ -204,13 +209,15 @@ const App = () => {
             </div>
             <div className="desktop:tw-flex desktop:tw-justify-between">
               <div className="tw-mb-3 tw-pt-7 tw-relative desktop:tw-mb-0">
-                <div className="tw-hidden tw-w-full tw-absolute tw-left-0 tw-top-0 desktop:tw-flex tw-justify-center tw-items-center">
+                <div className="tw-hidden tw-w-full tw-absolute tw-left-0 tw-top-0 realdesktop:tw-flex tw-justify-center tw-items-center">
                   {
                     currentMaxTemp !== '' &&
                     (<span className="tw-inline-block tw-py-0.5 tw-px-2 tw-text-xs tw-bg-gray-dark tw-text-white tw-rounded-md">{ currentMaxTemp }</span>)
                   }
                 </div>
-                <BarChart amount={tempMax} utcTime={utcTime} onSetCurrent={setCurrentMaxTemp} />
+                <div onMouseLeave={() => setCurrentMaxTemp('')}>
+                  <BarChart amount={tempMax} utcTime={utcTime} onSetCurrent={setCurrentMaxTemp} />
+                </div>
                 <div className="tw-text-center tw-text-xl tw-font-bold tw-mt-3 tw-mb-1">Max Temperature (°C)</div>
                 <div className="tw-text-center tw-text-sm tw-font-bold">
                   { formatTime(tempMax[0].time) } ~ { formatTime(tempMax[tempMax.length - 1].time) }
@@ -218,20 +225,22 @@ const App = () => {
               </div>
 
               <div className="tw-mb-3 tw-pt-7 tw-relative desktop:tw-mb-0">
-                <div className="tw-hidden tw-w-full tw-absolute tw-left-0 tw-top-0 desktop:tw-flex tw-justify-center tw-items-center">
+                <div className="tw-hidden tw-w-full tw-absolute tw-left-0 tw-top-0 realdesktop:tw-flex tw-justify-center tw-items-center">
                   {
                     currentMinTemp !== '' &&
                     (<span className="tw-inline-block tw-py-0.5 tw-px-2 tw-text-xs tw-bg-gray-dark tw-text-white tw-rounded-md">{ currentMinTemp }</span>)
                   }
                 </div>
-                <BarChart amount={tempMin} utcTime={utcTime} onSetCurrent={setCurrentMinTemp} />
+                <div onMouseLeave={() => setCurrentMinTemp('')}>
+                  <BarChart amount={tempMin} utcTime={utcTime} onSetCurrent={setCurrentMinTemp} />
+                </div>
                 <div className="tw-text-center tw-text-xl tw-font-bold tw-mt-3 tw-mb-1">Min Temperature (°C)</div>
                 <div className="tw-text-center tw-text-sm tw-font-bold">
                   { formatTime(tempMin[0].time) } ~ { formatTime(tempMin[tempMin.length - 1].time) }
                 </div>
               </div>
             </div>
-            <div className="tw-mt-5 tw-text-sm tw-font-bold tw-text-gray-dark tw-text-center">All of time zones use the UTC {utcTime > 0 ? `+${utcTime}` : utcTime} time.</div>
+            <div className="tw-mt-7 tw-text-sm tw-font-bold tw-text-gray-dark tw-text-center">All of time zones use the UTC {utcTime > 0 ? `+${utcTime}` : utcTime} time.</div>
           </section>
         )
       }

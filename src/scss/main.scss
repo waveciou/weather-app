@@ -82,14 +82,22 @@ body {
     transition: fill 0.4s ease;
     cursor: pointer;
 
-    &:hover {
-      fill: $color-gray-dark;
+    @media screen and (min-width: 1025px) {
+      &:hover {
+        fill: $color-gray-dark;
+      }
     }
   }
 
   &__text {
     pointer-events: none;
   }
+}
+
+.bar-chart-time {
+  width: 290px;
+  height: 20px;
+  margin: auto;
 }
 
 .bouncing-animation {

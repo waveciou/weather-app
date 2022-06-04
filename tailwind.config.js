@@ -10,6 +10,7 @@ module.exports = {
     screens: {
       mobile: '370px',
       desktop: '692px',
+      realdesktop: '1025px'
     },
     colors: {
       white: '#FFFFFF',
