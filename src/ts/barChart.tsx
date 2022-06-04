@@ -1,50 +1,55 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import dayjs from 'dayjs';
+import { ITempData } from '@/TypeScript/App';
 
 interface IBarChartProps {
-  amount: number[];
+  amount: ITempData[];
 }
 
 interface IAmountData {
   value: number;
   percent: number;
+  time: number;
 }
 
 const BarChart: React.FC<IBarChartProps> = ({ amount }) => {
   const [amountList, setAmountList] = useState<IAmountData[]>([]);
 
   useEffect(() => {
-    const max: number = Math.max(...amount) * 100;
-    const min: number = Math.min(...amount) * 100;
+    const _amount: number[] = amount.map(({ value }) => value);
+    const max: number = Math.max(..._amount) * 100;
+    const min: number = Math.min(..._amount) * 100;
     const range: number = max - min;
 
-    const result: IAmountData[] = amount.map((_value) => {
-      const value = _value * 100;
+    const result: IAmountData[] = amount.map(({ value, time }) => {
+      const formatValue = value * 100;
       let percent = 100;
 
-      if (value === max) {
+      if (formatValue === max) {
         percent = 100;
-      } else if (value === min) {
+      } else if (formatValue === min) {
         percent = 10;
       } else {
-        percent = 10 + ((value - min) / range * 100);
+        const _percent: number = ((formatValue - min) / range * 100);
+        percent = _percent > 90 ? _percent : 10 + _percent;
       }
 
-      return { value: _value, percent };
+      return { value, percent, time };
     });
-
-    console.log(result);
 
     setAmountList(result);
   }, [amount]);
 
   return (
-    <svg className="bar-chart" width="290px" height="100%" y="0px" x="0px">
+    <svg className="bar-chart" width="290px" height="200px" y="0px" x="0px">
       {
-        amountList.map(({ value, percent }, index: number) => {
+        amountList.map(({ value, percent, time }, index: number) => {
           const id: string = uuidv4();
           return (
-            <g key={id}>
+            <g key={id} onMouseEnter={() => {
+              console.log(dayjs.unix(time).format('YYYY/MM/DD HH:MM'));
+            }}>
               <rect
                 className="bar-chart__column"
                 width="50px"

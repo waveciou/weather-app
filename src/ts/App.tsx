@@ -1,9 +1,23 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import dayjs from 'dayjs';
 import PieChart from '@/TypeScript/pieChart';
 import BarChart from '@/TypeScript/barChart';
 
+interface ICityDetail {
+  name: string;
+  coord: {
+    lat: number;
+    lon: number;
+  };
+  population: number;
+  sunrise: number;
+  sunset: number;
+  time: number;
+}
+
 interface IDataListItem {
+  dt: number;
   main: {
     temp_max: number;
     temp_min: number;
@@ -11,16 +25,21 @@ interface IDataListItem {
   }
 }
 
+export interface ITempData {
+  value: number;
+  time: number;
+}
+
 const App = () => {
   const [inputValue, setInputValue] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
 
-  const [tempMax, setTempMax] = useState<number[]>([]);
-  const [tempMin, setTempMin] = useState<number[]>([]);
+  const [tempMax, setTempMax] = useState<ITempData[]>([]);
+  const [tempMin, setTempMin] = useState<ITempData[]>([]);
   const [humidity, setHumidity] = useState<null | number>(null);
 
-  const [cityName, setCityName] = useState<string>('');
+  const [cityDetail, setCityDetail] = useState<null | ICityDetail>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const result: string = e.target.value;
@@ -34,7 +53,7 @@ const App = () => {
       setIsLoading(true);
       setIsError(false);
 
-      setCityName('');
+      setCityDetail(null);
       setTempMax([]);
       setTempMin([]);
       setHumidity(null);
@@ -56,19 +75,38 @@ const App = () => {
           }
         });
 
-        const max = data.list.map(({ main }: IDataListItem) => main.temp_max);
-        const min = data.list.map(({ main }: IDataListItem) => main.temp_min);
-        const hum = data.list.pop().main.humidity;
+        console.log(data);
+
+        const max: ITempData[] = data.list.map(({ dt, main }: IDataListItem) => {
+          return {
+            value: main.temp_max,
+            time: dt,
+          };
+        });
+
+        const min: ITempData[] = data.list.map(({ dt, main }: IDataListItem) => {
+          return {
+            value: main.temp_min,
+            time: dt,
+          };
+        });
 
         setTempMax(max);
         setTempMin(min);
-        setHumidity(hum);
+        setHumidity(data.list[0].main.humidity);
 
-        setCityName(`${data.city.name}, ${data.city.country}`);
+        const { coord, population, sunrise, sunset } = data.city;
+
+        setCityDetail({
+          name: `${data.city.name}, ${data.city.country}`,
+          coord,
+          population,
+          sunrise,
+          sunset,
+          time: data.list[0].dt,
+        });
+
         setInputValue('');
-
-        console.log(data);
-
         setIsLoading(false);
       } catch (error) {
         console.log(error);
@@ -97,17 +135,20 @@ const App = () => {
       </div>
 
       {
-        !isLoading && !isError && cityName !== '' && (
+        !isLoading && !isError && cityDetail !== null && (
           <section className="tw-p-5 tw-rounded-md tw-bg-white">
-            <div className="tw-flex tw-justify-between tw-mb-3">
+            <div className="tw-flex tw-justify-between tw-mb-5">
               <div className="tw-flex-grow tw-basis-0">
-                <h2 className="tw-text-3xl tw-font-bold tw-break-words">{ cityName }</h2>
+                <h2 className="tw-text-3xl tw-font-bold tw-break-words">{ cityDetail.name }</h2>
               </div>
               {
                 humidity !== null && (
                   <div className="tw-w-52">
                     <PieChart amount={humidity} />
-                    <div className="tw-text-center tw-text-xl tw-font-bold tw-my-3">Humidity</div>
+                    <div className="tw-text-center tw-text-xl tw-font-bold tw-mt-3 tw-mb-1">Humidity</div>
+                    <div className="tw-text-center tw-text-md tw-font-bold">
+                      { dayjs.unix(cityDetail.time).format('YYYY/MM/DD HH:MM') }
+                    </div>
                   </div>
                 )
               }
