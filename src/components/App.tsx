@@ -81,7 +81,7 @@ const App = () => {
       try {
         const { data } = await axios({
           method: 'get',
-          url: 'http://api.openweathermap.org/data/2.5/forecast',
+          url: 'https://api.openweathermap.org/data/2.5/forecast',
           params: {
             q: result,
             units: 'metric',
