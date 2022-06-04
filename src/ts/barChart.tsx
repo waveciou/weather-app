@@ -43,7 +43,10 @@ const BarChart: React.FC<IBarChartProps> = ({ amount, onSetCurrent }) => {
   }, [amount]);
 
   return (
-    <svg className="bar-chart" width="290px" height="200px" y="0px" x="0px">
+    <svg
+      className="bar-chart" width="290px" height="200px" y="0px" x="0px"
+      onMouseLeave={() => onSetCurrent('')}
+    >
       {
         amountList.map(({ value, percent, time }, index: number) => {
           const id: string = uuidv4();

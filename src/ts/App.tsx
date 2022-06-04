@@ -30,6 +30,20 @@ export interface ITempData {
   time: number;
 }
 
+const formatTime = (time: number, format?: string ): string => {
+  const _format = format ? format : 'YYYY/MM/DD HH:MM';
+  return dayjs.unix(time).format(_format);
+};
+
+const formatCurrency = (value: number) => {
+  let result = value.toString();
+  const reg = /(-?\d+)(\d{3})/;
+  while (reg.test(result)) {
+    result = result.replace(reg, '$1,$2');
+  }
+  return result;
+};
+
 const App = () => {
   const [inputValue, setInputValue] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -141,8 +155,30 @@ const App = () => {
         !isLoading && !isError && cityDetail !== null && (
           <section className="tw-p-5 tw-rounded-md tw-bg-white">
             <div className="tw-flex tw-justify-between tw-mb-5">
-              <div className="tw-flex-grow tw-basis-0">
-                <h2 className="tw-text-3xl tw-font-bold tw-break-words">{ cityDetail.name }</h2>
+              <div className="tw-flex-grow tw-basis-0 tw-pr-5">
+                <h2 className="tw-text-3xl tw-font-bold tw-break-words tw-mb-4">{ cityDetail.name }</h2>
+                <div className="tw-p-3 tw-rounded-md tw-bg-gray-light">
+                  <ul>
+                    <li className="tw-text-base tw-leading-7 tw-font-bold">
+                      <strong>Date: </strong>{ formatTime(cityDetail.time, 'YYYY/MM/DD') }
+                    </li>
+                    <li className="tw-text-base tw-leading-7 tw-font-bold">
+                      <strong>Latitude: </strong>{ cityDetail.coord.lat }
+                    </li>
+                    <li className="tw-text-base tw-leading-7 tw-font-bold">
+                      <strong>Longitude: </strong>{ cityDetail.coord.lon }
+                    </li>
+                    <li className="tw-text-base tw-leading-7 tw-font-bold">
+                      <strong>Population: </strong>{ formatCurrency(cityDetail.population) }
+                    </li>
+                    <li className="tw-text-base tw-leading-7 tw-font-bold">
+                      <strong>Sunrise: </strong>{ formatTime(cityDetail.sunrise, 'HH:MM') }
+                    </li>
+                    <li className="tw-text-base tw-leading-7 tw-font-bold">
+                      <strong>Sunset: </strong>{ formatTime(cityDetail.sunset, 'HH:MM') }
+                    </li>
+                  </ul>
+                </div>
               </div>
               {
                 humidity !== null && (
@@ -150,22 +186,39 @@ const App = () => {
                     <PieChart amount={humidity} />
                     <div className="tw-text-center tw-text-xl tw-font-bold tw-mt-3 tw-mb-1">Humidity</div>
                     <div className="tw-text-center tw-text-md tw-font-bold">
-                      { dayjs.unix(cityDetail.time).format('YYYY/MM/DD HH:MM') }
+                      { formatTime(cityDetail.time) }
                     </div>
                   </div>
                 )
               }
             </div>
             <div className="tw-flex tw-justify-between">
-              <div className="tw-pb-5 tw-relative">
+              <div className="tw-pt-7 tw-relative">
+                <div className="tw-w-full tw-absolute tw-left-0 tw-top-0 tw-flex tw-justify-center tw-items-center">
+                  {
+                    currentMaxTemp !== '' &&
+                    (<span className="tw-inline-block tw-py-0.5 tw-px-2 tw-text-xs tw-bg-gray-dark tw-text-white tw-rounded-md">{ currentMaxTemp }</span>)
+                  }
+                </div>
                 <BarChart amount={tempMax} onSetCurrent={setCurrentMaxTemp} />
                 <div className="tw-text-center tw-text-xl tw-font-bold tw-mt-3 tw-mb-1">Max Temperature</div>
-                <div className="tw-w-full tw-absolute tw-left-0 tw-bottom-0 tw-text-center tw-text-sm tw-font-bold">{ currentMaxTemp }</div>
+                <div className="tw-text-center tw-text-sm tw-font-bold">
+                  { formatTime(tempMax[0].time) } ~ { formatTime(tempMax[tempMax.length - 1].time) }
+                </div>
               </div>
-              <div className="tw-pb-5 tw-relative">
+
+              <div className="tw-pt-7 tw-relative">
+                <div className="tw-w-full tw-absolute tw-left-0 tw-top-0 tw-flex tw-justify-center tw-items-center">
+                  {
+                    currentMinTemp !== '' &&
+                    (<span className="tw-inline-block tw-py-0.5 tw-px-2 tw-text-xs tw-bg-gray-dark tw-text-white tw-rounded-md">{ currentMinTemp }</span>)
+                  }
+                </div>
                 <BarChart amount={tempMin} onSetCurrent={setCurrentMinTemp} />
                 <div className="tw-text-center tw-text-xl tw-font-bold tw-mt-3 tw-mb-1">Min Temperature</div>
-                <div className="tw-w-full tw-absolute tw-left-0 tw-bottom-0 tw-text-center tw-text-sm tw-font-bold">{ currentMinTemp }</div>
+                <div className="tw-text-center tw-text-sm tw-font-bold">
+                  { formatTime(tempMin[0].time) } ~ { formatTime(tempMin[tempMin.length - 1].time) }
+                </div>
               </div>
             </div>
           </section>
