@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import axios from 'axios';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import PieChart from './pieChart';
 import BarChart from './barChart';
 
@@ -30,21 +31,9 @@ export interface ITempData {
   time: number;
 }
 
-const formatTime = (time: number, format?: string ): string => {
-  const _format = format ? format : 'YYYY/MM/DD HH:MM';
-  return dayjs.unix(time).format(_format);
-};
-
-const formatCurrency = (value: number) => {
-  let result = value.toString();
-  const reg = /(-?\d+)(\d{3})/;
-  while (reg.test(result)) {
-    result = result.replace(reg, '$1,$2');
-  }
-  return result;
-};
-
 const App = () => {
+  dayjs.extend(utc);
+
   const [inputValue, setInputValue] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
@@ -52,6 +41,7 @@ const App = () => {
   const [tempMax, setTempMax] = useState<ITempData[]>([]);
   const [tempMin, setTempMin] = useState<ITempData[]>([]);
   const [humidity, setHumidity] = useState<null | number>(null);
+  const [utcTime, setUtcTime] = useState<number>(8);
 
   const [currentMaxTemp, setCurrentMaxTemp] = useState<string>('');
   const [currentMinTemp, setCurrentMinTemp] = useState<string>('');
@@ -77,6 +67,7 @@ const App = () => {
       setTempMax([]);
       setTempMin([]);
       setHumidity(null);
+      setUtcTime(8);
 
       try {
         const { data } = await axios({
@@ -115,7 +106,7 @@ const App = () => {
         setTempMin(min);
         setHumidity(data.list[0].main.humidity);
 
-        const { coord, population, sunrise, sunset } = data.city;
+        const { coord, population, sunrise, sunset, timezone } = data.city;
 
         setCityDetail({
           name: `${data.city.name}, ${data.city.country}`,
@@ -126,6 +117,8 @@ const App = () => {
           time: data.list[0].dt,
         });
 
+        setUtcTime(timezone / 3600);
+
         setInputValue('');
         setIsLoading(false);
       } catch (error) {
@@ -134,6 +127,20 @@ const App = () => {
         setIsLoading(false);
       }
     }
+  };
+
+  const formatTime = useCallback((time: number, format?: string): string => {
+    const _format = format ? format : 'YYYY/MM/DD HH:MM';
+    return dayjs.unix(time).utcOffset(utcTime).format(_format);
+  }, [utcTime]);
+
+  const formatCurrency = (value: number) => {
+    let result = value.toString();
+    const reg = /(-?\d+)(\d{3})/;
+    while (reg.test(result)) {
+      result = result.replace(reg, '$1,$2');
+    }
+    return result;
   };
 
   return (
@@ -203,8 +210,8 @@ const App = () => {
                     (<span className="tw-inline-block tw-py-0.5 tw-px-2 tw-text-xs tw-bg-gray-dark tw-text-white tw-rounded-md">{ currentMaxTemp }</span>)
                   }
                 </div>
-                <BarChart amount={tempMax} onSetCurrent={setCurrentMaxTemp} />
-                <div className="tw-text-center tw-text-xl tw-font-bold tw-mt-3 tw-mb-1">Max Temperature</div>
+                <BarChart amount={tempMax} utcTime={utcTime} onSetCurrent={setCurrentMaxTemp} />
+                <div className="tw-text-center tw-text-xl tw-font-bold tw-mt-3 tw-mb-1">Max Temperature (°C)</div>
                 <div className="tw-text-center tw-text-sm tw-font-bold">
                   { formatTime(tempMax[0].time) } ~ { formatTime(tempMax[tempMax.length - 1].time) }
                 </div>
@@ -217,13 +224,14 @@ const App = () => {
                     (<span className="tw-inline-block tw-py-0.5 tw-px-2 tw-text-xs tw-bg-gray-dark tw-text-white tw-rounded-md">{ currentMinTemp }</span>)
                   }
                 </div>
-                <BarChart amount={tempMin} onSetCurrent={setCurrentMinTemp} />
-                <div className="tw-text-center tw-text-xl tw-font-bold tw-mt-3 tw-mb-1">Min Temperature</div>
+                <BarChart amount={tempMin} utcTime={utcTime} onSetCurrent={setCurrentMinTemp} />
+                <div className="tw-text-center tw-text-xl tw-font-bold tw-mt-3 tw-mb-1">Min Temperature (°C)</div>
                 <div className="tw-text-center tw-text-sm tw-font-bold">
                   { formatTime(tempMin[0].time) } ~ { formatTime(tempMin[tempMin.length - 1].time) }
                 </div>
               </div>
             </div>
+            <div className="tw-mt-5 tw-text-sm tw-font-bold tw-text-gray-dark tw-text-center">All of time zones use the UTC {utcTime > 0 ? `+${utcTime}` : utcTime} time.</div>
           </section>
         )
       }

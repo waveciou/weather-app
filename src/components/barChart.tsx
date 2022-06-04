@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { ITempData } from './App';
 
 interface IBarChartProps {
   amount: ITempData[];
+  utcTime: number;
   onSetCurrent: (time: string) => void;
 }
 
@@ -14,7 +16,9 @@ interface IAmountData {
   time: number;
 }
 
-const BarChart: React.FC<IBarChartProps> = ({ amount, onSetCurrent }) => {
+const BarChart: React.FC<IBarChartProps> = ({ amount, utcTime, onSetCurrent }) => {
+  dayjs.extend(utc);
+
   const [amountList, setAmountList] = useState<IAmountData[]>([]);
 
   useEffect(() => {
@@ -53,7 +57,7 @@ const BarChart: React.FC<IBarChartProps> = ({ amount, onSetCurrent }) => {
           return (
             <g
               key={id}
-              onMouseEnter={() => onSetCurrent(dayjs.unix(time).format('YYYY/MM/DD HH:MM'))}
+              onMouseEnter={() => onSetCurrent(dayjs.unix(time).utcOffset(utcTime).format('YYYY/MM/DD HH:MM'))}
               onMouseLeave={() => onSetCurrent('')}
             >
               <rect
