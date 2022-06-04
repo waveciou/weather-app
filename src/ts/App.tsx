@@ -39,6 +39,9 @@ const App = () => {
   const [tempMin, setTempMin] = useState<ITempData[]>([]);
   const [humidity, setHumidity] = useState<null | number>(null);
 
+  const [currentMaxTemp, setCurrentMaxTemp] = useState<string>('');
+  const [currentMinTemp, setCurrentMinTemp] = useState<string>('');
+
   const [cityDetail, setCityDetail] = useState<null | ICityDetail>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -154,13 +157,15 @@ const App = () => {
               }
             </div>
             <div className="tw-flex tw-justify-between">
-              <div>
-                <BarChart amount={tempMax} />
-                <div className="tw-text-center tw-text-xl tw-font-bold tw-my-3">Max Temperature</div>
+              <div className="tw-pb-5 tw-relative">
+                <BarChart amount={tempMax} onSetCurrent={setCurrentMaxTemp} />
+                <div className="tw-text-center tw-text-xl tw-font-bold tw-mt-3 tw-mb-1">Max Temperature</div>
+                <div className="tw-w-full tw-absolute tw-left-0 tw-bottom-0 tw-text-center tw-text-sm tw-font-bold">{ currentMaxTemp }</div>
               </div>
-              <div>
-                <BarChart amount={tempMin} />
-                <div className="tw-text-center tw-text-xl tw-font-bold tw-my-3">Min Temperature</div>
+              <div className="tw-pb-5 tw-relative">
+                <BarChart amount={tempMin} onSetCurrent={setCurrentMinTemp} />
+                <div className="tw-text-center tw-text-xl tw-font-bold tw-mt-3 tw-mb-1">Min Temperature</div>
+                <div className="tw-w-full tw-absolute tw-left-0 tw-bottom-0 tw-text-center tw-text-sm tw-font-bold">{ currentMinTemp }</div>
               </div>
             </div>
           </section>

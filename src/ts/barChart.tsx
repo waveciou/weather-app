@@ -5,6 +5,7 @@ import { ITempData } from '@/TypeScript/App';
 
 interface IBarChartProps {
   amount: ITempData[];
+  onSetCurrent: (time: string) => void;
 }
 
 interface IAmountData {
@@ -13,7 +14,7 @@ interface IAmountData {
   time: number;
 }
 
-const BarChart: React.FC<IBarChartProps> = ({ amount }) => {
+const BarChart: React.FC<IBarChartProps> = ({ amount, onSetCurrent }) => {
   const [amountList, setAmountList] = useState<IAmountData[]>([]);
 
   useEffect(() => {
@@ -47,9 +48,11 @@ const BarChart: React.FC<IBarChartProps> = ({ amount }) => {
         amountList.map(({ value, percent, time }, index: number) => {
           const id: string = uuidv4();
           return (
-            <g key={id} onMouseEnter={() => {
-              console.log(dayjs.unix(time).format('YYYY/MM/DD HH:MM'));
-            }}>
+            <g
+              key={id}
+              onMouseEnter={() => onSetCurrent(dayjs.unix(time).format('YYYY/MM/DD HH:MM'))}
+              onMouseLeave={() => onSetCurrent('')}
+            >
               <rect
                 className="bar-chart__column"
                 width="50px"
@@ -59,6 +62,7 @@ const BarChart: React.FC<IBarChartProps> = ({ amount }) => {
                 rx="6"
               ></rect>
               <text
+                className="bar-chart__text"
                 x={`${(50 + 10) * index + 25}px`}
                 y={`${104 - percent}%`}
                 fill="#ffffff"

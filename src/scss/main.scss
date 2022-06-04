@@ -78,4 +78,8 @@ body {
       fill: $color-gray-dark;
     }
   }
+
+  &__text {
+    pointer-events: none;
+  }
 }
