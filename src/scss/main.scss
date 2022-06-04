@@ -30,7 +30,7 @@ body {
 }
 
 #root {
-  padding: 10px;
+  padding: 20px 10px;
 }
 
 .pie-chart {
@@ -68,6 +68,7 @@ body {
 .bar-chart {
   width: 290px;
   height: 200px;
+  margin: auto;
 
   &__column {
     fill: $color-blue-dark;

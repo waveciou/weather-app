@@ -66,6 +66,9 @@ const App = () => {
   const handleSubmit = async () => {
     const result: string = inputValue.trim();
 
+    setCurrentMaxTemp('');
+    setCurrentMinTemp('');
+
     if (result !== '' && !isLoading) {
       setIsLoading(true);
       setIsError(false);
@@ -136,26 +139,26 @@ const App = () => {
   return (
     <div className="tw-w-full tw-max-w-2xl tw-m-auto">
       <h1 className="tw-my-4 tw-text-center tw-text-4xl tw-font-bold">Weather APP</h1>
-      <div className="tw-w-full tw-flex tw-items-center tw-my-8">
+      <div className={`tw-w-full tw-flex tw-items-center tw-my-8 ${ isLoading ? 'tw-opacity-60 tw-select-none' : '' }`}>
         <input
           type="text"
-          className="tw-w-full tw-py-2 tw-px-3 tw-rounded-md tw-bg-white tw-leading-6 tw-flex-grow tw-basis-0 tw-appearance-none tw-tracking-wide"
+          className="tw-w-full tw-py-2 tw-px-3 tw-rounded-md tw-bg-white tw-leading-6 tw-flex-grow tw-basis-0 tw-appearance-none tw-tracking-wide tw-text-base"
           value={inputValue}
           onChange={handleChange}
           placeholder="Search City"
         />
         <button
           type="button"
-          className="tw-bg-black tw-text-white tw-py-2 tw-px-3 tw-ml-3 tw-rounded-md tw-leading-6"
+          className="tw-bg-black tw-text-white tw-py-2 tw-px-3 tw-ml-3 tw-rounded-md tw-leading-6 tw-text-base"
           onClick={handleSubmit}
         >Submit</button>
       </div>
 
       {
         !isLoading && !isError && cityDetail !== null && (
-          <section className="tw-p-5 tw-rounded-md tw-bg-white">
-            <div className="tw-flex tw-justify-between tw-mb-5">
-              <div className="tw-flex-grow tw-basis-0 tw-pr-5">
+          <section className="tw-p-3 mobile:tw-p-5 tw-rounded-md tw-bg-white">
+            <div className="desktop:tw-flex desktop:tw-justify-between tw-mb-5">
+              <div className="desktop:tw-flex-grow desktop:tw-basis-0 desktop:tw-pr-5">
                 <h2 className="tw-text-3xl tw-font-bold tw-break-words tw-mb-4">{ cityDetail.name }</h2>
                 <div className="tw-p-3 tw-rounded-md tw-bg-gray-light">
                   <ul>
@@ -182,7 +185,7 @@ const App = () => {
               </div>
               {
                 humidity !== null && (
-                  <div className="tw-w-52">
+                  <div className="tw-w-52 tw-mx-auto tw-my-5 desktop:tw-mx-0 desktop:tw-my-0">
                     <PieChart amount={humidity} />
                     <div className="tw-text-center tw-text-xl tw-font-bold tw-mt-3 tw-mb-1">Humidity</div>
                     <div className="tw-text-center tw-text-md tw-font-bold">
@@ -192,9 +195,9 @@ const App = () => {
                 )
               }
             </div>
-            <div className="tw-flex tw-justify-between">
-              <div className="tw-pt-7 tw-relative">
-                <div className="tw-w-full tw-absolute tw-left-0 tw-top-0 tw-flex tw-justify-center tw-items-center">
+            <div className="desktop:tw-flex desktop:tw-justify-between">
+              <div className="tw-mb-3 tw-pt-7 tw-relative desktop:tw-mb-0">
+                <div className="tw-hidden tw-w-full tw-absolute tw-left-0 tw-top-0 desktop:tw-flex tw-justify-center tw-items-center">
                   {
                     currentMaxTemp !== '' &&
                     (<span className="tw-inline-block tw-py-0.5 tw-px-2 tw-text-xs tw-bg-gray-dark tw-text-white tw-rounded-md">{ currentMaxTemp }</span>)
@@ -207,8 +210,8 @@ const App = () => {
                 </div>
               </div>
 
-              <div className="tw-pt-7 tw-relative">
-                <div className="tw-w-full tw-absolute tw-left-0 tw-top-0 tw-flex tw-justify-center tw-items-center">
+              <div className="tw-mb-3 tw-pt-7 tw-relative desktop:tw-mb-0">
+                <div className="tw-hidden tw-w-full tw-absolute tw-left-0 tw-top-0 desktop:tw-flex tw-justify-center tw-items-center">
                   {
                     currentMinTemp !== '' &&
                     (<span className="tw-inline-block tw-py-0.5 tw-px-2 tw-text-xs tw-bg-gray-dark tw-text-white tw-rounded-md">{ currentMinTemp }</span>)
