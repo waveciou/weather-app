@@ -235,7 +235,16 @@ const App = () => {
       }
 
       {
-        isLoading && !isError && (<div>Loading</div>)
+        isLoading && !isError && (
+          <div className="tw-text-gray-dark tw-text-center tw-my-20">
+            <div className="tw-flex tw-items-center tw-justify-center">
+              <span className="bouncing-animation tw-w-4 tw-h-4 tw-block tw-my-8 tw-mx-1 tw-bg-gray-dark tw-rounded-full" />
+              <span className="bouncing-animation bouncing-animation_delay-2 tw-w-4 tw-h-4 tw-block tw-my-8 tw-mx-1 tw-bg-gray-dark tw-rounded-full" />
+              <span className="bouncing-animation bouncing-animation_delay-4 tw-w-4 tw-h-4 tw-block tw-my-8 tw-mx-1 tw-bg-gray-dark tw-rounded-full" />
+            </div>
+            <div className="tw-text-2xl tw-font-bold tw-break-words">Loading...</div>
+          </div>
+        )
       }
     </div>
   );
