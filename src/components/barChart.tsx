@@ -49,7 +49,9 @@ const BarChart: React.FC<IBarChartProps> = ({ amount, utcTime, onSetCurrent }) =
   return (
     <>
       <svg
-        className="bar-chart" width="290px" height="200px" y="0px" x="0px"
+        className="tw-m-auto"
+        width="290px"
+        height="200px"
         onMouseLeave={() => onSetCurrent('')}
       >
         {
@@ -86,7 +88,7 @@ const BarChart: React.FC<IBarChartProps> = ({ amount, utcTime, onSetCurrent }) =
           })
         }
       </svg>
-      <svg className="bar-chart-time" width="290px" height="20px">
+      <svg className="tw-m-auto" width="290px" height="20px">
         {
           amountList.map(({ time }, index: number) => {
             const id: string = uuidv4();
@@ -95,7 +97,7 @@ const BarChart: React.FC<IBarChartProps> = ({ amount, utcTime, onSetCurrent }) =
                 <text
                   x={`${(50 + 10) * index + 25}px`}
                   y="10px"
-                  fill="#000"
+                  fill="#35495e"
                   alignmentBaseline="central"
                   textAnchor="middle"
                   fontSize="12"

@@ -147,7 +147,7 @@ const App = () => {
 
   return (
     <div className="tw-w-full tw-max-w-2xl tw-m-auto">
-      <h1 className="tw-my-4 tw-text-center tw-text-4xl tw-font-bold">Weather APP</h1>
+      <h1 className="before-font-material before:tw-content-['\e2bd'] before:tw-text-4xl desktop:before:tw-text-5xl before:tw-mr-3 tw-my-4 tw-text-3xl desktop:tw-text-4xl tw-font-bold tw-flex tw-items-center tw-justify-center">Weather APP</h1>
       <div className={`tw-w-full tw-flex tw-items-center tw-my-8 ${ isLoading ? 'tw-opacity-60 tw-select-none' : '' }`}>
         <input
           type="text"
@@ -165,10 +165,10 @@ const App = () => {
 
       {
         !isLoading && !isError && cityDetail !== null && (
-          <section className="tw-p-3 mobile:tw-p-5 tw-rounded-md tw-bg-white">
+          <section className="tw-p-3 mobile:tw-p-4 desktop:tw-p-5 tw-rounded-md tw-bg-white">
             <div className="desktop:tw-flex desktop:tw-justify-between tw-mb-5">
               <div className="desktop:tw-flex-grow desktop:tw-basis-0 desktop:tw-pr-5">
-                <h2 className="tw-text-3xl tw-font-bold tw-break-words tw-mb-4">{ cityDetail.name }</h2>
+                <h2 className="tw-text-2xl desktop:tw-text-3xl tw-font-bold tw-break-words tw-mb-4">{ cityDetail.name }</h2>
                 <div className="tw-p-3 tw-rounded-md tw-bg-gray-light">
                   <ul>
                     <li className="tw-text-base tw-leading-7 tw-font-bold">
@@ -209,7 +209,7 @@ const App = () => {
             </div>
             <div className="desktop:tw-flex desktop:tw-justify-between">
               <div className="tw-mb-3 tw-pt-7 tw-relative desktop:tw-mb-0">
-                <div className="tw-hidden tw-w-full tw-absolute tw-left-0 tw-top-0 realdesktop:tw-flex tw-justify-center tw-items-center">
+                <div className="tw-hidden tw-w-full tw-absolute tw-left-0 tw-top-0 real-desktop:tw-flex tw-justify-center tw-items-center">
                   {
                     currentMaxTemp !== '' &&
                     (<span className="tw-inline-block tw-py-0.5 tw-px-2 tw-text-xs tw-bg-gray-dark tw-text-white tw-rounded-md">{ currentMaxTemp }</span>)
@@ -218,14 +218,14 @@ const App = () => {
                 <div onMouseLeave={() => setCurrentMaxTemp('')}>
                   <BarChart amount={tempMax} utcTime={utcTime} onSetCurrent={setCurrentMaxTemp} />
                 </div>
-                <div className="tw-text-center tw-text-xl tw-font-bold tw-mt-3 tw-mb-1">Max Temperature (°C)</div>
-                <div className="tw-text-center tw-text-sm tw-font-bold">
+                <div className="tw-text-center tw-text-xl tw-font-bold tw-mt-4 tw-mb-1">Max Temperature (°C)</div>
+                <div className="real-desktop:tw-hidden tw-text-center tw-text-sm tw-font-bold">
                   { formatTime(tempMax[0].time) } ~ { formatTime(tempMax[tempMax.length - 1].time) }
                 </div>
               </div>
 
               <div className="tw-mb-3 tw-pt-7 tw-relative desktop:tw-mb-0">
-                <div className="tw-hidden tw-w-full tw-absolute tw-left-0 tw-top-0 realdesktop:tw-flex tw-justify-center tw-items-center">
+                <div className="tw-hidden tw-w-full tw-absolute tw-left-0 tw-top-0 real-desktop:tw-flex tw-justify-center tw-items-center">
                   {
                     currentMinTemp !== '' &&
                     (<span className="tw-inline-block tw-py-0.5 tw-px-2 tw-text-xs tw-bg-gray-dark tw-text-white tw-rounded-md">{ currentMinTemp }</span>)
@@ -234,13 +234,13 @@ const App = () => {
                 <div onMouseLeave={() => setCurrentMinTemp('')}>
                   <BarChart amount={tempMin} utcTime={utcTime} onSetCurrent={setCurrentMinTemp} />
                 </div>
-                <div className="tw-text-center tw-text-xl tw-font-bold tw-mt-3 tw-mb-1">Min Temperature (°C)</div>
-                <div className="tw-text-center tw-text-sm tw-font-bold">
+                <div className="tw-text-center tw-text-xl tw-font-bold tw-mt-4 tw-mb-1">Min Temperature (°C)</div>
+                <div className="real-desktop:tw-hidden tw-text-center tw-text-sm tw-font-bold">
                   { formatTime(tempMin[0].time) } ~ { formatTime(tempMin[tempMin.length - 1].time) }
                 </div>
               </div>
             </div>
-            <div className="tw-mt-7 tw-text-sm tw-font-bold tw-text-gray-dark tw-text-center">All of time zones use the UTC {utcTime > 0 ? `+${utcTime}` : utcTime} time.</div>
+            <div className="tw-mt-10 tw-text-sm tw-font-bold tw-text-gray-dark tw-text-center">All of time zones use the UTC {utcTime > 0 ? `+${utcTime}` : utcTime} time.</div>
           </section>
         )
       }

@@ -1,8 +1,21 @@
 @charset "UTF-8";
 @import './_variables.scss';
-
-@import url('https://fonts.googleapis.com/css?family=Noto+Sans+TC:400,500&display=fallback');
 @import './_reset.scss';
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;600&display=fallback');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url('https://example.com/MaterialIcons-Regular.eot'); /* For IE6-8 */
+  src: local('Material Icons'),
+    local('MaterialIcons-Regular'),
+  // url('https://example.com/MaterialIcons-Regular.woff2') format('woff2'),
+  // url('https://example.com/MaterialIcons-Regular.woff') format('woff'),
+  // url('https://example.com/MaterialIcons-Regular.ttf') format('truetype');
+}
 
 /* stylelint-disable scss/at-rule-no-unknown */
 @tailwind base;
@@ -31,6 +44,32 @@ body {
 
 #root {
   padding: 20px 10px;
+}
+
+.before-font-material::before,
+.after-font-material::after {
+  font-size: 24px;
+  font-family: 'Material Icons', sans-serif;
+  font-weight: normal;
+  white-space: nowrap;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizelegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
 }
 
 @keyframes pie-chart-fill {
@@ -73,10 +112,6 @@ body {
 }
 
 .bar-chart {
-  width: 290px;
-  height: 200px;
-  margin: auto;
-
   &__column {
     fill: $color-blue-dark;
     transition: fill 0.4s ease;
@@ -92,12 +127,6 @@ body {
   &__text {
     pointer-events: none;
   }
-}
-
-.bar-chart-time {
-  width: 290px;
-  height: 20px;
-  margin: auto;
 }
 
 .bouncing-animation {
