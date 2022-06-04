@@ -13,7 +13,7 @@ export default defineConfig({
   base: '/weather-app/',
   resolve: {
     alias: [
-      { find: '@/TypeScript', replacement: resolve(__dirname, 'src/ts') },
+      { find: '@/Components', replacement: resolve(__dirname, 'src/components') },
       { find: '@/SCSS', replacement: resolve(__dirname, 'src/scss') },
     ],
   },

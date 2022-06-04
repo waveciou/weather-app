@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import dayjs from 'dayjs';
-import { ITempData } from '@/TypeScript/App';
+import { ITempData } from './App';
 
 interface IBarChartProps {
   amount: ITempData[];

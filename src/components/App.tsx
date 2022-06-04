@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import dayjs from 'dayjs';
-import PieChart from '@/TypeScript/pieChart';
-import BarChart from '@/TypeScript/barChart';
+import PieChart from './pieChart';
+import BarChart from './barChart';
 
 interface ICityDetail {
   name: string;
