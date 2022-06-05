@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import PieChart from './pieChart';
@@ -24,11 +25,17 @@ interface IDataListItem {
     temp_max: number;
     temp_min: number;
     humidity: number;
-  }
+  };
+  weather: { description: string }[];
 }
 
 export interface ITempData {
   value: number;
+  time: number;
+}
+
+interface IWeatherData {
+  description: string;
   time: number;
 }
 
@@ -39,6 +46,8 @@ const App = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
 
+  const [cityDetail, setCityDetail] = useState<null | ICityDetail>(null);
+  const [weatherList, setWeatherList] = useState<IWeatherData[]>([]);
   const [tempMax, setTempMax] = useState<ITempData[]>([]);
   const [tempMin, setTempMin] = useState<ITempData[]>([]);
   const [humidity, setHumidity] = useState<null | number>(null);
@@ -46,8 +55,6 @@ const App = () => {
 
   const [currentMaxTemp, setCurrentMaxTemp] = useState<string>('');
   const [currentMinTemp, setCurrentMinTemp] = useState<string>('');
-
-  const [cityDetail, setCityDetail] = useState<null | ICityDetail>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const result: string = e.target.value;
@@ -65,6 +72,7 @@ const App = () => {
       setIsError(false);
 
       setCityDetail(null);
+      setWeatherList([]);
       setTempMax([]);
       setTempMin([]);
       setHumidity(null);
@@ -87,6 +95,13 @@ const App = () => {
           }
         });
 
+        const weathers: IWeatherData[] = data.list.map(({ dt, weather }: IDataListItem) => {
+          return {
+            description: weather[0].description,
+            time: dt,
+          };
+        });
+
         const max: ITempData[] = data.list.map(({ dt, main }: IDataListItem) => {
           return {
             value: main.temp_max,
@@ -104,6 +119,7 @@ const App = () => {
         setTempMax(max);
         setTempMin(min);
         setHumidity(data.list[0].main.humidity);
+        setWeatherList(weathers);
 
         const { coord, population, sunrise, sunset, timezone } = data.city;
 
@@ -130,7 +146,7 @@ const App = () => {
   };
 
   const formatTime = useCallback((time: number, format?: string): string => {
-    const _format = format ? format : 'YYYY/MM/DD HH:MM';
+    const _format = format ? format : 'YYYY/MM/DD HH:mm';
     return dayjs.unix(time).utcOffset(utcTime).format(_format);
   }, [utcTime]);
 
@@ -142,6 +158,8 @@ const App = () => {
     }
     return result;
   };
+
+  const classDefines = 'tw-w-1/5 tw-px-2.5 tw-leading-relaxed tw-align-middle tw-text-center tw-border tw-border-gray-light tw-border-solid tw-text-xs';
 
   return (
     <div className="tw-w-full tw-max-w-2xl tw-m-auto">
@@ -185,10 +203,10 @@ const App = () => {
                       <strong>Population: </strong>{ formatCurrency(cityDetail.population) }
                     </li>
                     <li className="tw-text-base tw-leading-7 tw-font-bold">
-                      <strong>Sunrise: </strong>{ formatTime(cityDetail.sunrise, 'HH:MM') }
+                      <strong>Sunrise: </strong>{ formatTime(cityDetail.sunrise, 'HH:mm') }
                     </li>
                     <li className="tw-text-base tw-leading-7 tw-font-bold">
-                      <strong>Sunset: </strong>{ formatTime(cityDetail.sunset, 'HH:MM') }
+                      <strong>Sunset: </strong>{ formatTime(cityDetail.sunset, 'HH:mm') }
                     </li>
                   </ul>
                 </div>
@@ -198,13 +216,46 @@ const App = () => {
                   <div className="tw-w-52 tw-mx-auto tw-my-5 desktop:tw-mx-0 desktop:tw-my-0">
                     <PieChart amount={humidity} />
                     <div className="tw-text-center tw-text-xl tw-font-bold tw-mt-3 tw-mb-1">Humidity</div>
-                    <div className="tw-text-center tw-text-md tw-font-bold">
+                    {/* <div className="tw-text-center tw-text-md tw-font-bold">
                       { formatTime(cityDetail.time) }
-                    </div>
+                    </div> */}
                   </div>
                 )
               }
             </div>
+
+            <div className="tw-w-full tw-my-5 tw-overflow-x-auto tw-overflow-y-hidden tw-rounded-md">
+              <table className="tw-w-full">
+                <thead>
+                  <tr className="tw-bg-black">
+                    {
+                      weatherList.map(({ time }) => {
+                        return (
+                          <th key={uuidv4()} className={`${classDefines} tw-py-2 tw-text-white tw-leading-4`}>
+                            <div>{ formatTime(time, 'YYYY/MM/DD') }</div>
+                            <div>{ formatTime(time, 'HH:mm') }</div>
+                          </th>
+                        );
+                      })
+                    }
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    {
+                      weatherList.map(({ description }) => {
+                        return (
+                          <td key={uuidv4()} className={`${classDefines} tw-py-3`}>
+                            <span>{ description }</span>
+                          </td>
+                        );
+                      })
+                    }
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
             <div className="desktop:tw-flex desktop:tw-justify-between">
               <div className="tw-mb-3 tw-pt-7 tw-relative desktop:tw-mb-0">
                 <div className="tw-hidden tw-w-full tw-absolute tw-left-0 tw-top-0 real-desktop:tw-flex tw-justify-center tw-items-center">
@@ -238,6 +289,7 @@ const App = () => {
                 </div>
               </div>
             </div>
+
             <div className="tw-mt-10 tw-text-sm tw-font-bold tw-text-gray-dark tw-text-center">All of time use UTC {utcTime > 0 ? `+${utcTime}` : utcTime}  time zone.</div>
           </section>
         )

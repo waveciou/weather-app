@@ -9,6 +9,7 @@
 1. The user can input location (ex: Taipei, Tokyo, London) and getting 5 weather forecast from open API.
 
 2. Rendering forecast data with charts:
+
 Max temperature (bar chart) Min temperature (bar chart) Humidity (pie chart).
 
 ## Tech Stack

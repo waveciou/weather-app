@@ -61,7 +61,7 @@ const BarChart: React.FC<IBarChartProps> = ({ amount, utcTime, onSetCurrent }) =
               <g
                 key={id}
                 onMouseEnter={() => {
-                  const formatTime: string = dayjs.unix(time).utcOffset(utcTime).format('YYYY/MM/DD HH:MM');
+                  const formatTime: string = dayjs.unix(time).utcOffset(utcTime).format('YYYY/MM/DD HH:mm');
                   onSetCurrent(formatTime);
                 }}
                 onMouseLeave={() => onSetCurrent('')}
@@ -101,7 +101,7 @@ const BarChart: React.FC<IBarChartProps> = ({ amount, utcTime, onSetCurrent }) =
                   alignmentBaseline="central"
                   textAnchor="middle"
                   fontSize="12"
-                >{ dayjs.unix(time).utcOffset(utcTime).format('HH:MM') }</text>
+                >{ dayjs.unix(time).utcOffset(utcTime).format('HH:mm') }</text>
               </g>
             );
           })
