@@ -87,8 +87,6 @@ const App = () => {
           }
         });
 
-        console.log(data);
-
         const max: ITempData[] = data.list.map(({ dt, main }: IDataListItem) => {
           return {
             value: main.temp_max,
@@ -240,7 +238,7 @@ const App = () => {
                 </div>
               </div>
             </div>
-            <div className="tw-mt-10 tw-text-sm tw-font-bold tw-text-gray-dark tw-text-center">All of time zones use the UTC {utcTime > 0 ? `+${utcTime}` : utcTime} time.</div>
+            <div className="tw-mt-10 tw-text-sm tw-font-bold tw-text-gray-dark tw-text-center">All of time use UTC {utcTime > 0 ? `+${utcTime}` : utcTime}  time zone.</div>
           </section>
         )
       }
