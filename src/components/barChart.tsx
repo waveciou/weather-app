@@ -67,7 +67,7 @@ const BarChart: React.FC<IBarChartProps> = ({ amount, utcTime, onSetCurrent }) =
                 onMouseLeave={() => onSetCurrent('')}
               >
                 <rect
-                  className="bar-chart__column"
+                  className="bar-chart__column tw-cursor-pointer"
                   width="50px"
                   height={`${percent}%`}
                   y={`${100 - percent}%`}

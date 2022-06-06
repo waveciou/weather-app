@@ -14,7 +14,7 @@ const PieChart: React.FC<IPieChartProps> = ({ amount }) => {
   return (
     <div>
       <svg
-        className="pie-chart"
+        className="tw-m-auto"
         viewBox="0 0 33.83098862 33.83098862"
         width="200"
         height="200"

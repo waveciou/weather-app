@@ -72,7 +72,9 @@ body {
 }
 
 @keyframes pie-chart-fill {
-  to { stroke-dasharray: 0 100; }
+  to {
+    stroke-dasharray: 0 100;
+  }
 }
 
 @keyframes pie-chart-appear {
@@ -90,8 +92,6 @@ body {
 }
 
 .pie-chart {
-  margin: auto;
-
   &__circle { 
     transform: rotate(-90deg);
     animation: pie-chart-fill 2s reverse;
@@ -114,7 +114,6 @@ body {
   &__column {
     fill: $color-blue-dark;
     transition: fill 0.4s ease;
-    cursor: pointer;
 
     @media screen and (min-width: 1025px) {
       &:hover {
