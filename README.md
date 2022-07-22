@@ -15,3 +15,8 @@
 2. Tailwind CSS, SCSS, Material Icons.
 3. Weather data source open API: [Open Weather API](https://openweathermap.org/).
 4. Use SVG to build bar chart & pie chart, It has not use any UI component library for development.
+5. The Vue 3 version, [demo](https://waveciou.github.io/vue3-practice/#/weather-app).
+
+## License
+
+[MIT](https://github.com/waveciou/weather-app/blob/master/LICENSE.md)
